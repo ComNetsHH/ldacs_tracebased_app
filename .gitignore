@@ -9,4 +9,6 @@ src/Makefile
 .DS_Store
 *.so
 /src/*.so
+src/UdpTraceBasedApp_m.cc
+src/UdpTraceBasedApp_m.h
 
