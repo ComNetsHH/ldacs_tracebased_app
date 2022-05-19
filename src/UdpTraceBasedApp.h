@@ -28,6 +28,10 @@
 #include "inet/common/ModuleAccess.h"
 #include "inet/common/lifecycle/NodeStatus.h"
 #include "inet/common/lifecycle/ModuleOperations.h"
+#include "UdpTraceBasedApp_m.h"
+#include "inet/transportlayer/contract/udp/UdpSocket.h"
+
+
 
 
 using namespace inet;
@@ -37,6 +41,14 @@ class UdpTraceBasedApp : public UdpBasicApp
 
 protected:
     virtual void processSend();
+    //////////////////////////////////////////////////////////////////////////
+    // Hop Count Signal (Musab)
+    //////////////////////////////////////////////////////////////////////////
+    virtual void sendPacket();
+    virtual void processPacket(Packet *msg);
+    virtual void socketDataArrived(UdpSocket *socket, Packet *packet) override;
+    virtual void handleMessageWhenUp(cMessage *msg) override;
+
     virtual void initialize(int stage);
     virtual void parseTraceFile2Vector(const char* fileName, std::vector<double>& vecOfDoubles);
     void processStart();
@@ -47,6 +59,10 @@ protected:
     // Emit application packet sent Signal (Musab)
     //////////////////////////////////////////////////////////////////////////
     simsignal_t appPacketSentSignal;
+    //////////////////////////////////////////////////////////////////////////
+    // Emit Hop Count Signal (Musab)
+    //////////////////////////////////////////////////////////////////////////
+    simsignal_t hopCountSignal;
 };
 
 #endif // ifndef __INET_UDPTRACEBASEDAPP_H

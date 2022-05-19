@@ -52,4 +52,9 @@ simple UdpTraceBasedApp extends UdpBasicApp
         //////////////////////////////////////////////////////////////////////////
 	    @signal[appPacketSent](type=simtime_t);
         @statistic[appPacketSent](source=appPacketSent; record=vector);
+        //////////////////////////////////////////////////////////////////////////
+        // Emit Hop Count Signal (Musab)
+        //////////////////////////////////////////////////////////////////////////
+        @signal[hopCount](type=unsigned int);
+        @statistic[hopCount](source=hopCount; record=vector);
 }

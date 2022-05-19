@@ -14,14 +14,14 @@ build-debug:
 	cd ../src; opp_makemake -f --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug
 
 build-release:	
-	cd ../src; \
-	echo -e "\ntracebasedapp"; opp_makemake -f --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET; make -j8 MODE=release
+	echo -e "\ntracebasedapp"; \
+	cd ../src; opp_makemake -f --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET; make -j8 MODE=release
 
 
 # GLOBAL VARIABLES  can be shared among all targets
 # default binary in RELEASE mode
 SIM_BINARY = ../out/gcc-release/src/intairnet-tracebasedapp
-SIM_BINARY_DBG = ../out/gcc-debug/src/tracebasedapp_dbg
+SIM_BINARY_DBG = ../out/gcc-debug/src/intairnet-tracebasedapp_dbg
 # include .ned files
 INCL = -n ../src:./:../../inet4/src/
 
