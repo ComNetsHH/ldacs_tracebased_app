@@ -28,20 +28,27 @@ void UdpTraceBasedApp::parseTraceFile2Vector(const char* filename, std::vector<d
     // Check if the file is opened (we modified the error message here to just  return in order to enable scripting the application)
     if (in.fail())
             return;
-    std::string str;
+    std::string lineStr;
     // Read the file line by line until the end.
-    while (std::getline(in, str))
+    while (std::getline(in, lineStr))
     {
         // Append the contents of a non-empty line to the vector of strings
-        if (str.size() > 0)
-            vecOfStrs.push_back(str);
+        if (lineStr.size() > 0){
+            double lineDouble = stod(lineStr);
+            simtime_t lineStart = lineDouble;
+            // only add line if it is within boundaries [startTime,stopTime]
+            if ((lineStart >= startTime && (lineStart <= stopTime || stopTime == -1))){
+                vecOfDoubles.push_back(lineDouble);
+            // vecOfStrs.push_back(lineStr);
+            }
+        }
     }
     // Close The File
     in.close();
     // Assign the elements of vecOfStrs to vecOfDoubles after converting it from string to double
-    vecOfDoubles.resize(vecOfStrs.size());
-    std::transform(vecOfStrs.begin(), vecOfStrs.end(), vecOfDoubles.begin(),
-        [](std::string const& val) {return stod(val); });
+    // vecOfDoubles.resize(vecOfStrs.size());
+    // std::transform(vecOfStrs.begin(), vecOfStrs.end(), vecOfDoubles.begin(),
+    //     [](std::string const& val) {return stod(val); });
 }
 
 void UdpTraceBasedApp::handleStartOperation(LifecycleOperation *operation)
