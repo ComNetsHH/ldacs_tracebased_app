@@ -46,6 +46,16 @@ simple UdpTraceBasedApp extends UdpBasicApp
         string traceFile; // The path to the trace file written as "path"
         packetName = default("UdpTraceBasedApp"); 
         sendInterval = default(-1s); // the parameter sendInterval is not used in this application 
+        //////////////////////////////////////////////////////////////////////////
+        // Allow multuple groundstations (Musab) 
+        //////////////////////////////////////////////////////////////////////////
+        bool multiGroundStationUsed = default(false);
+        double GSx @unit(m) = default(4734222.285m);
+        double GSy @unit(m) = default(1381949.583m);
+        double GSz @unit(m) = default(662813.2938m);
+        double GS2x @unit(m) = default(1588538.41038296m);
+        double GS2y @unit(m) = default(1246029.47871449m);
+        double GS2z @unit(m) = default(665146.321414376m);
         @class(UdpTraceBasedApp);
         //////////////////////////////////////////////////////////////////////////
         // Emit application packet sent Signal (Musab)
