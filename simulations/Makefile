@@ -33,6 +33,9 @@ TRACEBASEDAPP_CONFIGNAME = General
 tracebasedapp-qtenv:
 	opp_runall -j1 $(SIM_BINARY) omnetpp.ini -c $(TRACEBASEDAPP_CONFIGNAME) $(INCL) -u Qtenv
 
+tracebasedappMultiGS-qtenv:
+	opp_runall -j1 $(SIM_BINARY) omnetpp_multiGS.ini -c $(TRACEBASEDAPP_CONFIGNAME) $(INCL) -u Qtenv
+
 tracebasedapp-debug:
 	gdbgui --args $(SIM_BINARY_DBG) omnetpp.ini -u Cmdenv -c $(TRACEBASEDAPP_CONFIGNAME) $(INCL)
 

@@ -57,17 +57,23 @@ protected:
     // Allow multuple groundstations (Musab) 
     //////////////////////////////////////////////////////////////////////////
     bool multiGroundStationUsed = false;
+    virtual void readTraceFile(const char* file_name);
+    virtual int findClosestGroundStation();
+    int line_number;
+    std::vector<std::vector<double>> ground_stations_coordinates_array;
+    std::vector<std::string> ethernet_vector;
+    int destination_index;
     cModule *host = nullptr;
     IMobility *mobility = nullptr;
     virtual void sendPacket() override;
     virtual L3Address chooseDestAddr() override; // chooses random destination address and is multiGS choose closest in distance
-    std::vector<std::vector<double> > GSLocations;
-    double GSx = 0.0;
-    double GSy = 0.0;
-    double GSz = 0.0;
-    double GS2x = 0.0;
-    double GS2y = 0.0;
-    double GS2z = 0.0;
+    // std::vector<std::vector<double> > GSLocations;
+    // double GSx = 0.0;
+    // double GSy = 0.0;
+    // double GSz = 0.0;
+    // double GS2x = 0.0;
+    // double GS2y = 0.0;
+    // double GS2z = 0.0;
     //////////////////////////////////////////////////////////////////////////
     // Emit application packet sent Signal (Musab)
     //////////////////////////////////////////////////////////////////////////
