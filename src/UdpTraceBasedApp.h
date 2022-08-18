@@ -53,13 +53,13 @@ protected:
     void handleStartOperation(LifecycleOperation *operation);
     int timeIndex;
     std::vector<double> timeStamp;
+    std::vector<std::vector<double>> groundstationStamp;
     //////////////////////////////////////////////////////////////////////////
     // Allow multuple groundstations (Musab) 
     //////////////////////////////////////////////////////////////////////////
     bool multiGroundStationUsed = false;
-    virtual void readTraceFile(const char* file_name);
+    virtual void parseGroundstationTraceFile2Vector(const char* fileName);
     virtual int findClosestGroundStation();
-    int line_number;
     std::vector<std::vector<double>> ground_stations_coordinates_array;
     std::vector<std::string> ethernet_vector;
     int destination_index;

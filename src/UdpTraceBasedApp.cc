@@ -31,8 +31,7 @@ void UdpTraceBasedApp::initialize(int stage)
             host = getContainingNode(this);
             mobility = check_and_cast<IMobility *>(host->getSubmodule("mobility"));
             const char *file_name = par("groundstationsTraceFile");
-            readTraceFile(file_name);
-            // destination_index = findClosestGroundStation();
+            parseGroundstationTraceFile2Vector(file_name);
         }
         
         // GSx = par("GSx");
@@ -92,121 +91,40 @@ void UdpTraceBasedApp::parseTraceFile2Vector(const char* filename, std::vector<d
 // Allow multuple groundstations (Musab) 
 //////////////////////////////////////////////////////////////////////////
 ////The following function reads a trace file to store the coordinates of the ground stations
-void UdpTraceBasedApp::readTraceFile(const char* file_name)
+
+void UdpTraceBasedApp::parseGroundstationTraceFile2Vector(const char* filename)
 {
-    //reading the .txt file to list of ground_stations_coordinates
-    int position_of_first_comma,position_of_second_comma,position_of_third_comma,searching_position_output_textfile,position_at_output_textfile,assigning_position_z_coordinate,assigning_position_x_coordinate,assigning_position_y_coordinate,assigning_position_ethernet;
-
-    // Creating a text string, which is used to output the text file
-    std::string output_textfile;
-
-    // Read from the text file
-    std::ifstream MyReadFile(file_name);
-    //ifstream MyReadFile("ground_stations_coordinates.txt");
-    line_number=0;
-    
-    // Using a while loop together with the getline() function to read the file line by line
-    while (getline (MyReadFile, output_textfile)){               
-        // finding the position of the first ","
-        for( searching_position_output_textfile = 0; searching_position_output_textfile < output_textfile.length(); searching_position_output_textfile++){
-            if(output_textfile[searching_position_output_textfile]==','){
-                position_of_first_comma = searching_position_output_textfile;
-                break;
-            }
-        }
-        
-        // finding the position of the second ","
-        for( searching_position_output_textfile = searching_position_output_textfile+1; searching_position_output_textfile < output_textfile.length(); searching_position_output_textfile++){
-            if(output_textfile[searching_position_output_textfile]==','){
-                position_of_second_comma = searching_position_output_textfile;
-                break;
-            }
-        }
-
-        // finding the position of the third ","
-        for( searching_position_output_textfile = searching_position_output_textfile+1; searching_position_output_textfile < output_textfile.length(); searching_position_output_textfile++){
-            if(output_textfile[searching_position_output_textfile]==','){
-                position_of_third_comma = searching_position_output_textfile;
-                break;
-            }
-        }
-
-        char x_coordinate_Part[position_of_first_comma];
-        char y_coordinate_Part[position_of_second_comma-position_of_first_comma];
-        char z_coordinate_Part[position_of_third_comma-position_of_second_comma];
-        char ethernet_Part[output_textfile.length()-position_of_third_comma];
-
-
-        //assigning the x coordinate part of the trace file into the vector
-        position_at_output_textfile=0;
-        for(assigning_position_x_coordinate = 0;assigning_position_x_coordinate<position_of_first_comma;assigning_position_x_coordinate++){
-            x_coordinate_Part[assigning_position_x_coordinate]=output_textfile[position_at_output_textfile];
-            position_at_output_textfile++;
-        }
-        x_coordinate_Part[assigning_position_x_coordinate]='\0';
-        std::vector<double> temp;
-        
-        // convert string to double
-        temp.push_back(std::stod(x_coordinate_Part));
-        position_at_output_textfile++;
-
-        //assigning the y coordinate part of the trace file into the vector
-        for( assigning_position_y_coordinate=0;assigning_position_y_coordinate<position_of_second_comma-position_of_first_comma-1;assigning_position_y_coordinate++){
-            y_coordinate_Part[assigning_position_y_coordinate]=output_textfile[position_at_output_textfile];
-            position_at_output_textfile++;
-        }
-        y_coordinate_Part[assigning_position_y_coordinate]='\0';
-        
-        // convert string to double
-        temp.push_back(std::stod(y_coordinate_Part));
-        position_at_output_textfile++;
-
-        //assigning the z coordinate part of the trace file into vector
-        for(assigning_position_z_coordinate=0;assigning_position_z_coordinate<position_of_third_comma-position_of_second_comma-1;assigning_position_z_coordinate++){
-            z_coordinate_Part[assigning_position_z_coordinate]=output_textfile[position_at_output_textfile];
-            position_at_output_textfile++;
-        }
-        z_coordinate_Part[assigning_position_z_coordinate]='\0';
-        
-        // convert string to double
-        temp.push_back(std::stod(z_coordinate_Part));
-        position_at_output_textfile++;
-
-        //assigning the ethernet part of the trace file into vector
-        for(assigning_position_ethernet=0;assigning_position_ethernet<output_textfile.length()-position_of_third_comma-1;assigning_position_ethernet++){
-            ethernet_Part[assigning_position_ethernet]=output_textfile[position_at_output_textfile];
-            position_at_output_textfile++;
-        }
-        ethernet_Part[assigning_position_ethernet]='\0';
-        ethernet_vector.push_back(ethernet_Part);
-
-        ground_stations_coordinates_array.push_back(temp);
-        temp.clear();
-        line_number++;
-
+    std::vector<double> groundstationCoordinate;
+    std::ifstream in(filename, std::ios::in);
+    // Check if the file is opened (we modified the error message here to just  return in order to enable scripting the application)
+    if (in.fail())
+        return;
+    std::string lineStr;
+    std::string ethernetInterface;
+    double x;
+    double y;
+    double z;
+    std::istringstream iss;
+    // Read the file line by line until the end.
+    while (std::getline(in, lineStr))
+    {
+        std::istringstream iss(lineStr);
+        iss >> x >> y >> z >> ethernetInterface;
+        //std::cout << "x=" << x << ",y=" << y << ",z=" << z << ",interface=" << ethernetInterface << std::endl;
+        // insert the x, y, z coordinates of one groundstation into groundstationCoordinate vector
+        groundstationCoordinate.insert(groundstationCoordinate.end(), { x,y,z });
+        ground_stations_coordinates_array.insert(ground_stations_coordinates_array.end(), { groundstationCoordinate });
+        // clear the vector that contains a row of the grounstation trace file
+        groundstationCoordinate.clear();
+        // insert the groundstationCoordinate vector into the vector of vectors groundstationCoordinates
+        ethernet_vector.insert(ethernet_vector.end(), { ethernetInterface });
     }
-    
-    // Closing the file
-    MyReadFile.close();
-    
-    //printing ground stations coordinates vector 
-    EV << "List of ground stations coordinates: " << " \n";
-    std::vector<std::vector<double>> :: iterator test_vector_iterator;
-    test_vector_iterator = ground_stations_coordinates_array.begin();
-    for (test_vector_iterator; test_vector_iterator != ground_stations_coordinates_array.end(); test_vector_iterator++) {
-        std::vector<double> :: iterator inner_vector_iterator = (*test_vector_iterator).begin();
-        for(inner_vector_iterator; inner_vector_iterator != (*test_vector_iterator).end(); inner_vector_iterator++){
-            std::cout << *inner_vector_iterator <<" ";
-        }
-        std::cout << std::endl;
+    for (int i = 0; i < ground_stations_coordinates_array.size(); i++){
+        EV_INFO << "Ground station " << i << " location: " << ground_stations_coordinates_array.at(i).at(0) << ", " << ground_stations_coordinates_array.at(i).at(1) << ", " << ground_stations_coordinates_array.at(i).at(2) << endl;
     }
-    
-    //printing ethernet vector 
-    EV << "List of Ethernets: " << " \n";
-    for(std::vector<std::string>::iterator e=ethernet_vector.begin();e!=ethernet_vector.end();++e){
-        std::cout << *e;
-        std::cout << std::endl;
-    }
+
+    // Close The File
+    in.close();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -223,11 +141,11 @@ int UdpTraceBasedApp::findClosestGroundStation()
     
     std::vector<double> distance_vector;
     //applying the formula sqrt((x_2-x_1)^2+(y_2-y_1)^2+(z_2-z1)^2) to get the distance between aircraft and all ground stations
-    double min_distance = sqrt(pow((aircraft_position.x-ground_stations_coordinates_array[0][0]),2) + pow((aircraft_position.y-ground_stations_coordinates_array[0][1]),2)+ pow((aircraft_position.z-ground_stations_coordinates_array[0][2]),2));
-    
-    for(int i = 0; i < line_number; i++){
-        double distance = sqrt(pow((aircraft_position.x-ground_stations_coordinates_array[i][0]),2) + pow((aircraft_position.y-ground_stations_coordinates_array[i][1]),2)+ pow((aircraft_position.z-ground_stations_coordinates_array[i][2]),2));
-        distance_vector.push_back(distance);
+    double min_distance = sqrt(pow((aircraft_position.x-ground_stations_coordinates_array.at(0).at(0)),2) + pow((aircraft_position.y-ground_stations_coordinates_array.at(0).at(1)),2)+ pow((aircraft_position.z-ground_stations_coordinates_array.at(0).at(2)),2));    
+    for(int i = 0; i < ground_stations_coordinates_array.size(); i++){
+        double distance = sqrt(pow((aircraft_position.x-ground_stations_coordinates_array.at(i).at(0)),2) + pow((aircraft_position.y-ground_stations_coordinates_array.at(i).at(1)),2)+ pow((aircraft_position.z-ground_stations_coordinates_array.at(i).at(2)),2));
+        // distance_vector.push_back(distance);
+        distance_vector.insert(distance_vector.end(), { distance });
 
         //find the closest ground station
         if (distance < min_distance){
@@ -236,7 +154,7 @@ int UdpTraceBasedApp::findClosestGroundStation()
         }
     }
     EV << " closest_ground_station is: " << closest_ground_station << " \n";
-    EV << " Corresponding Ethernet is: " << ethernet_vector[closest_ground_station] << " \n";
+    EV << " Corresponding Ethernet is: " << ethernet_vector.at(closest_ground_station) << " \n";
     //new code upto here
     return closest_ground_station;
 }
