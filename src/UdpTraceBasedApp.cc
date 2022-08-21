@@ -94,7 +94,7 @@ void UdpTraceBasedApp::parseTraceFile2Vector(const char* filename, std::vector<d
 
 void UdpTraceBasedApp::parseGroundstationTraceFile2Vector(const char* filename)
 {
-    std::vector<double> groundstationCoordinate;
+    // std::vector<double> groundstationCoordinate;
     std::ifstream in(filename, std::ios::in);
     // Check if the file is opened (we modified the error message here to just  return in order to enable scripting the application)
     if (in.fail())
@@ -112,10 +112,11 @@ void UdpTraceBasedApp::parseGroundstationTraceFile2Vector(const char* filename)
         iss >> x >> y >> z >> ethernetInterface;
         //std::cout << "x=" << x << ",y=" << y << ",z=" << z << ",interface=" << ethernetInterface << std::endl;
         // insert the x, y, z coordinates of one groundstation into groundstationCoordinate vector
-        groundstationCoordinate.insert(groundstationCoordinate.end(), { x,y,z });
-        ground_stations_coordinates_array.insert(ground_stations_coordinates_array.end(), { groundstationCoordinate });
+        // groundstationCoordinate.insert(groundstationCoordinate.end(), { x,y,z });
+        // ground_stations_coordinates_array.insert(ground_stations_coordinates_array.end(), { groundstationCoordinate });
         // clear the vector that contains a row of the grounstation trace file
-        groundstationCoordinate.clear();
+        // groundstationCoordinate.clear();
+        ground_stations_coordinates_array.push_back({x,y,z });
         // insert the groundstationCoordinate vector into the vector of vectors groundstationCoordinates
         ethernet_vector.insert(ethernet_vector.end(), { ethernetInterface });
     }

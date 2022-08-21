@@ -39,3 +39,5 @@ tracebasedappMultiGS-qtenv:
 tracebasedapp-debug:
 	gdbgui --args $(SIM_BINARY_DBG) omnetpp.ini -u Cmdenv -c $(TRACEBASEDAPP_CONFIGNAME) $(INCL)
 
+tracebasedappMultiGS-debug:
+	gdbgui --args $(SIM_BINARY_DBG) omnetpp_multiGS.ini -u Cmdenv -c $(TRACEBASEDAPP_CONFIGNAME) $(INCL)
