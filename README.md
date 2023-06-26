@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8082929.svg)](https://doi.org/10.5281/zenodo.8082929)
+
     The L-Band Digital Aeronautical Communications System (LDACS) Trace-Based App implements a trace-based application in OMNeT++ for the LDACS Air-Air Medium Access Control simulator.
     Copyright (C) 2023  Sebastian Lindner, Konrad Fuger, Musab Ahmed Eltayeb Ahmed, Andreas Timm-Giel, Institute of Communication Networks, Hamburg University of Technology, Hamburg, Germany
 
