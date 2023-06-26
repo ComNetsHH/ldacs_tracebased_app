@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Lindner
+    given-names: Sebastian
+    orcid: https://orcid.org/0000-0002-5694-9675
+  - family-names: Fuger
+    given-names: Konrad
+    orcid: https://orcid.org/0000-0002-8472-1483
+  - family-names: Ahmed
+    given-names: Musab Ahmed Eltayeb
+    orcid: https://orcid.org/0000-0001-5554-3414
+  - family-names: Timm-Giel
+    given-names: Andreas
+    orcid: https://orcid.org/0000-0002-5998-6113
+title: "LDACS MCSOTDMA Simulator Glue Library"
+version: 1.0
+doi: 10.5281/zenodo.8082929
+date-released: 2023-06-26
